@@ -1,0 +1,19 @@
+{% extends 'main.html' %}
+
+{% comment %} {% include 'navbar.html' %} {% endcomment %}
+
+{% block content %}
+<h1> Maintenenace home page</h1>
+
+
+
+<h2>{{emp.employee_username}}</h2>
+<p>{{emp.employee_department_id}}</p>
+
+
+    <hr>
+    {% for privilege in privileges %}
+        <span style="border:1px solid grey">{{privilege}}</span>
+    {% endfor %}
+
+{% endblock content %}
