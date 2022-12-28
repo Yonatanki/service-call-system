@@ -6,6 +6,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
 from .forms import CustomUserCreationForm, CustomerCreationForm
 from .models import customer
+from maintenance.models import call_request
 
 
 # Create your views here.
@@ -20,13 +21,26 @@ def customers(request):
     return render(request, 'users/customers.html', context)
 
 
+def userHome(request):
+    # print('PK: ', pk)
+    # profile = customer.objects.get(id=pk)
+    print('REQUEST: ', request)
+    # topSkills = profile.skill_set.exclude(description__exact="")
+    # otherSkills = profile.skill_set.filter(description="")
+
+    # context = {'profile': profile, 'topSkills': topSkills,
+    #            "otherSkills": otherSkills}
+    # context = {'profile': profile}
+    return render(request, 'users/user-home.html')  # , context)
+
+
 def registerUser(request):
     page = 'register'
     form = CustomUserCreationForm()
     # customer_form = CustomerCreationForm()
     if request.method == 'POST':
         # customer_form = CustomerCreationForm(request.POST, request.FILES)
-        form = CustomUserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST, request.FILES)
         f = request.POST
         print('PHONE: ', form.fields)
         print('PHONE2222: ', request.POST)
@@ -35,7 +49,7 @@ def registerUser(request):
         # print('PHONE: ', fields['phone'])
         # customer_form = CustomerCreationForm(request.POST)
         # print('CUSTOMER FORM: ', customer_form)
-        if form.is_valid():# and customer_form.is_valid():
+        if form.is_valid():  # and customer_form.is_valid():
             user = form.save(commit=False)  # temporary save to object user but not commit so we can edit the data
             # customer_form.customer_phone = '0545232053'
             # print('CUSTOMER: XXX', customer_form.customer_phone)
@@ -58,17 +72,18 @@ def registerUser(request):
             messages.success(
                 request, 'An error has occurred during registration')
 
-    context = {'page': page, 'form': form}#, 'customer_form': customer_form}
+    context = {'page': page, 'form': form}  # , 'customer_form': customer_form}
     return render(request, 'users/login_register.html', context)
 
 
 def loginUser(request):
     page = 'login'
 
-    if request.user.is_authenticated:
-        return redirect('profiles')
+    # if request.user.is_authenticated:
+    #     return redirect('customer')
 
     if request.method == 'POST':
+        print('LOGIN : ', request.POST)
         username = request.POST['username'].lower()
         password = request.POST['password']
 
@@ -77,10 +92,12 @@ def loginUser(request):
         except:
             messages.error(request, 'Username does not exist')
 
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username,
+                            password=password)  # if the username & or password not authenticated return None
 
         if user is not None:
-            login(request, user)
+            print('USER NOT NONE : ', user.id)
+            login(request, user)  # create sessions for user in the database get the seesion and add to browser cookies
             return redirect(request.GET['next'] if 'next' in request.GET else 'account')
 
         else:
@@ -97,14 +114,17 @@ def logoutUser(request):
 
 @login_required(login_url='login')
 def userAccount(request):
-    profile = request.user.profile
-
-    skills = profile.skill_set.all()
-    projects = profile.project_set.all()
-
-    context = {'profile': profile, 'skills': skills, 'projects': projects}
+    customer = request.user.customer
+    print('CUSTOMER: ', customer)
+    print('CUSTOMER ID: ', customer.customer_id)
+    # skills = profile.skill_set.all()
+    print('call req: ', call_request.objects.all())
+    # requests = call_request.objects.get(request_customer_id=customer.customer_id)
+    context = {'customer': customer}
+    # context = {'requests': requests}
+    
+    # context = {'profile': profile, 'skills': skills, 'projects': projects}
     return render(request, 'users/account.html', context)
-
 
 # @login_required(login_url='login')
 # def editAccount(request):
@@ -122,24 +142,24 @@ def userAccount(request):
 #     return render(request, 'users/profile_form.html', context)
 
 
-@login_required(login_url='login')
-def inbox(request):
-    profile = request.user.profile
-    messageRequests = profile.messages.all()
-    unreadCount = messageRequests.filter(is_read=False).count()
-    context = {'messageRequests': messageRequests, 'unreadCount': unreadCount}
-    return render(request, 'users/inbox.html', context)
-
-
-@login_required(login_url='login')
-def viewMessage(request, pk):
-    profile = request.user.profile
-    message = profile.messages.get(id=pk)
-    if message.is_read == False:
-        message.is_read = True
-        message.save()
-    context = {'message': message}
-    return render(request, 'users/message.html', context)
+# @login_required(login_url='login')
+# def inbox(request):
+#     profile = request.user.profile
+#     messageRequests = profile.messages.all()
+#     unreadCount = messageRequests.filter(is_read=False).count()
+#     context = {'messageRequests': messageRequests, 'unreadCount': unreadCount}
+#     return render(request, 'users/inbox.html', context)
+#
+#
+# @login_required(login_url='login')
+# def viewMessage(request, pk):
+#     profile = request.user.profile
+#     message = profile.messages.get(id=pk)
+#     if message.is_read == False:
+#         message.is_read = True
+#         message.save()
+#     context = {'message': message}
+#     return render(request, 'users/message.html', context)
 
 # def createMessage(request, pk):
 #     recipient = Profile.objects.get(id=pk)

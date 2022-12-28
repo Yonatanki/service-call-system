@@ -110,7 +110,12 @@
 
 <!--        </table>-->
         {% endcomment %}
-        <h1>Test Page</h1>
+       <div class="column column--1of3">
+                <h1>customer page</h1>
+            </div>
+            <div> <a id="{{customer.customer_id}}" class="tag tag--pill tag--main settings__btn" href="{% url 'request' %}"><i class="im im-edit"></i>
+              open request</a></div><div>{{customer.customer_id}}</div>
+
       </div>
     </div>
   </div>
