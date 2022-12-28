@@ -119,6 +119,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+
 CORS_ALLOW_ALL_ORIGINS = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

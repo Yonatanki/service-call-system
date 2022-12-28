@@ -1,18 +1,25 @@
 from django import forms
 from django.forms import ModelForm, DateField, widgets
+<<<<<<< HEAD
 from .models import call_request
 
+=======
+from .models import request
+>>>>>>> bde0420 (initial commit)
 
 # from .utils import DatePickerInput
 
 
 class RequestForm(ModelForm):
     class Meta:
+
         model = call_request
+
 
         # widgets = {
         #     'Date': widgets.DateInput(attrs={'type': 'date'})
         # }
+
         # fields = '__all__'
 
         fields = ['request_customer_id', 'request_category_id', 'request_sub_category_id', 'request_location_id',
@@ -37,3 +44,5 @@ class RequestForm(ModelForm):
         #       loop "for" to styling the form fields in html:
         for name, field in self.fields.items():
             field.widget.attrs.update({'class': 'input'})
+
+

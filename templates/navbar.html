@@ -15,6 +15,8 @@
             </label>
             <ul class="header__menu">
 <!--                <li class="header__menuItem"><a href="{% url 'customers' %}">Developers</a></li>-->
+
+                <li class="header__menuItem"><a href="{% url 'customers' %}">Developers</a></li>
                 {% comment %}<li class="header__menuItem"><a href="{% url 'projects' %}">Projects</a></li>{% endcomment %}
 
 
@@ -29,6 +31,14 @@
                 <li class="header__menuItem"><a href="{% url 'login' %}" class="btn btn--sub">Login/Sign Up</a></li>
 
 <!--                <h1>Authenticated User</h1>-->
+                {% comment %}
+<!--                <li class="header__menuItem"><a href="{% url 'inbox' %}">Inbox</a></li>-->
+<!--                <li class="header__menuItem"><a href="{% url 'account' %}">Account</a></li>-->
+<!--                <li class="header__menuItem"><a href="{% url 'logout' %}" class="btn btn&#45;&#45;sub">Logout</a></li>-->
+<!--                {% else %}-->
+<!--                <li class="header__menuItem"><a href="{% url 'login' %}" class="btn btn&#45;&#45;sub">Login/Sign Up</a></li>-->
+                {% endcomment %}
+                <h1>Authenticated User</h1>
                 {% endif %}
             </ul>
         </nav>

@@ -1,7 +1,9 @@
 from django.contrib import admin
 
 # Register your models here.
+
 from .models import category, location, department, employee, sub_category, call_request, status, status_request, message, privileges
+
 
 admin.site.register(category)
 admin.site.register(location)

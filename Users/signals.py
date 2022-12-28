@@ -3,7 +3,9 @@ from django.dispatch import receiver
 
 from django.contrib.auth.models import User
 from .models import customer
+
 from maintenance.models import call_request
+
 
 from django.core.mail import send_mail
 from django.conf import settings
@@ -20,6 +22,7 @@ def updateCustomer(sender, instance, created, **kwargs):
     user = customer.user
 
     if created == False:
+
         user.first_name = customer.customer_first_name
         user.last_name = customer.customer_last_name
         user.username = customer.customer_username
@@ -68,6 +71,7 @@ def deleteCustomer(sender, instance, **kwargs):
         user.delete()
     except:
         pass
+
 
 
 def createRequest(sender, instance, **kwargs):
