@@ -6,6 +6,7 @@ from .forms import RequestForm
 from .models import employee
 from Users.models import customer
 
+
 # Create your views here.
 
 def home(request):
@@ -64,11 +65,11 @@ def create_request(request):
             messages.info(request, errors)
 
     context = {'form': request_form, 'customer': customer_instance}
+
     return render(request, "maintenance/request.html", context)
 
 
 def helpDesk(request):
-    
     page = 'IT'
     context = {'page': page}
     return render(request, 'IT/help_desk_home.html', context)
