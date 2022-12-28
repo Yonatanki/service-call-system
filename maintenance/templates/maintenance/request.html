@@ -1,0 +1,39 @@
+{% extends 'main.html' %}
+
+{% include 'navbar.html' %}
+
+{% block content %}
+
+<form class="form" method="POST" , enctype="multipart/form-data" xmlns="http://www.w3.org/1999/html">
+                    {% csrf_token %}
+<!--                    <div class="form__field input">-->
+<!--                        <label for="formInput#text#">Customer</label>-->
+<!--&lt;!&ndash;                        <input class="form__field input input">{{customer.customer_username}}&ndash;&gt;-->
+<!--                        <strong><input class="input" type="text" value="{{customer.customer_username}}" readonly></strong>-->
+<!--                    </div>-->
+        {% for field in form %}
+
+
+            {% if field.label == 'Customer' %}
+                <!-- Input:Text -->
+                <div class="form__field">
+                    <label for="formInput#text">{{field.label}} </label>
+                    <strong><input class="input" type="text" value="{{customer.customer_username}}" readonly></strong>
+                </div>
+            {% else %}
+
+                <div class="form__field">
+                        <label for="formInput#text">{{field.label}} </label>
+                        {{field}}
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        <input id="form--submit" class="btn btn--sub btn--lg  my-md" type="submit" value="Submit" />
+
+
+
+    <h1>Request Page</h1>
+    </form>
+
+{% endblock content %}

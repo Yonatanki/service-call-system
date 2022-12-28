@@ -1,0 +1,17 @@
+{% extends 'main.html' %}
+
+{% block content%}
+
+<h1>Customer page</h1>
+
+
+{% for customer in Customers %}
+    <div> Customers</div>
+    <div class="card__body dev">
+        <img class="avatar avatar--xl" src="{{ customer.customer_image.url }}" />
+        <h2 class="dev__name">{{customer.customer_name}}</h2>
+
+    </div>
+
+{% endfor %}
+{% endblock content %}
