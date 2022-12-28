@@ -38,17 +38,18 @@ class employee(models.Model):
     __tablename__ = "Employee"
     employee_id = models.UUIDField(default=uuid.uuid4, unique=True,
                                    primary_key=True, editable=False)
-
     # employee_id = models.ForeignKey(customer, blank=True, null=True, on_delete=models.CASCADE)
     employee_user_name = models.ForeignKey(customer, blank=True, null=True, on_delete=models.CASCADE)
     # employee_name = models.CharField(max_length=200, blank=True, null=True)
     # employee_name = models.ForeignKey(customer, blank=True, null=True, on_delete=models.CASCADE)
     # employee_username = models.CharField(customer.customer_username, max_length=200, unique=True, blank=True, null=True)
     # employee_username = models.ForeignKey(customer, blank=True, null=True, on_delete=models.CASCADE)
+
     employee_department_id = models.ForeignKey('department', blank=True, null=True, on_delete=models.CASCADE)
     employee_privileges = models.ManyToManyField('privileges', blank=True)
     # employee_privileges = models.ManyToOneRel('employee_privileges', 'privileges', 'employee_privileges')
     employee_created = models.DateTimeField(auto_now_add=True)
+
     # employee_email = models.EmailField(max_length=500, blank=True, null=True)
     # employee_email = models.ForeignKey(customer, blank=True, null=True, on_delete=models.CASCADE)
     # employee_phone = PhoneField(blank=True, null=True, help_text='Contact phone number')
@@ -103,6 +104,7 @@ class sub_category(models.Model):
         ordering = ['sub_category_name']
 
 
+
 class call_request(models.Model):
     __tablename__ = "Request"
     request_id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
@@ -148,6 +150,7 @@ class status_request(models.Model):
     status_request_id = models.UUIDField(default=uuid.uuid4, unique=True,
                                          primary_key=True, editable=False)
     status_request_request_id = models.ForeignKey('call_request', blank=True, null=True, on_delete=models.CASCADE)
+
     status_request_status = models.ForeignKey('status', blank=True, null=True, on_delete=models.CASCADE)
     status_request_description = models.TextField(null=True, blank=True)
     status_request_employee_id = models.ForeignKey('employee', blank=True, null=True, on_delete=models.CASCADE)

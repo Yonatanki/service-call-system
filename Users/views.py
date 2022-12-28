@@ -6,6 +6,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm
 from .forms import CustomUserCreationForm, CustomerCreationForm
 from .models import customer
+
 from maintenance.models import call_request
 
 
@@ -40,7 +41,9 @@ def registerUser(request):
     # customer_form = CustomerCreationForm()
     if request.method == 'POST':
         # customer_form = CustomerCreationForm(request.POST, request.FILES)
-        form = CustomUserCreationForm(request.POST, request.FILES)
+
+        form = CustomUserCreationForm(request.POST)
+
         f = request.POST
         print('PHONE: ', form.fields)
         print('PHONE2222: ', request.POST)
@@ -49,7 +52,9 @@ def registerUser(request):
         # print('PHONE: ', fields['phone'])
         # customer_form = CustomerCreationForm(request.POST)
         # print('CUSTOMER FORM: ', customer_form)
-        if form.is_valid():  # and customer_form.is_valid():
+
+        if form.is_valid():# and customer_form.is_valid():
+
             user = form.save(commit=False)  # temporary save to object user but not commit so we can edit the data
             # customer_form.customer_phone = '0545232053'
             # print('CUSTOMER: XXX', customer_form.customer_phone)
@@ -73,6 +78,8 @@ def registerUser(request):
                 request, 'An error has occurred during registration')
 
     context = {'page': page, 'form': form}  # , 'customer_form': customer_form}
+
+
     return render(request, 'users/login_register.html', context)
 
 
@@ -98,6 +105,8 @@ def loginUser(request):
         if user is not None:
             print('USER NOT NONE : ', user.id)
             login(request, user)  # create sessions for user in the database get the seesion and add to browser cookies
+
+       
             return redirect(request.GET['next'] if 'next' in request.GET else 'account')
 
         else:
@@ -114,6 +123,7 @@ def logoutUser(request):
 
 @login_required(login_url='login')
 def userAccount(request):
+
     customer = request.user.customer
     print('CUSTOMER: ', customer)
     print('CUSTOMER ID: ', customer.customer_id)
@@ -149,8 +159,8 @@ def userAccount(request):
 #     unreadCount = messageRequests.filter(is_read=False).count()
 #     context = {'messageRequests': messageRequests, 'unreadCount': unreadCount}
 #     return render(request, 'users/inbox.html', context)
-#
-#
+# 
+# 
 # @login_required(login_url='login')
 # def viewMessage(request, pk):
 #     profile = request.user.profile
@@ -160,6 +170,7 @@ def userAccount(request):
 #         message.save()
 #     context = {'message': message}
 #     return render(request, 'users/message.html', context)
+
 
 # def createMessage(request, pk):
 #     recipient = Profile.objects.get(id=pk)

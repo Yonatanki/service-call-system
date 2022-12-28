@@ -5,8 +5,6 @@ from django.contrib import admin
 from .forms import RequestForm
 from .models import employee
 from Users.models import customer
-
-
 # Create your views here.
 
 def home(request):
@@ -30,6 +28,7 @@ def maintenance(request, pk):
 
 
 def create_request(request):
+
     print('REQUEST2:  ', request.user.customer.customer_id)
     request_form = RequestForm()
     # print(request_form)
@@ -64,8 +63,8 @@ def create_request(request):
             errors = request_form._errors
             messages.info(request, errors)
 
-    context = {'form': request_form, 'customer': customer_instance}
 
+    context = {'form': request_form, 'customer': customer_instance}
     return render(request, "maintenance/request.html", context)
 
 
