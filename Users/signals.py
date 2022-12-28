@@ -3,6 +3,7 @@ from django.dispatch import receiver
 
 from django.contrib.auth.models import User
 from .models import customer
+from maintenance.models import call_request
 
 from django.core.mail import send_mail
 from django.conf import settings
@@ -19,7 +20,7 @@ def updateCustomer(sender, instance, created, **kwargs):
     user = customer.user
 
     if created == False:
-        user.first_name = customer.customer_fname
+        user.first_name = customer.customer_first_name
         user.last_name = customer.customer_last_name
         user.username = customer.customer_username
         user.email = customer.customer_email
@@ -68,6 +69,39 @@ def deleteCustomer(sender, instance, **kwargs):
     except:
         pass
 
+
+def createRequest(sender, instance, **kwargs):
+    print('Customer signal triggered')
+    print('INSTANCE: ', instance)
+    print('CREATED: ', created)
+    print('Sender: ', sender)
+    if created:  # checks if instance (customer) created
+        user = instance
+        print('USER INSTANCE: ', user)
+        print('USER INSTANCE EMAIL: ', user.email)
+        print('USER INSTANCE USERNAME: ', user.username)
+        print('USER INSTANCE FIRST NAME: ', user.first_name)
+        # print('USER INSTANCE PHONE: ', user.phone)
+        req = call_request.objects.create(
+            request_employee_id= user
+            # user=user,
+            # customer_username=user.username,
+            # customer_email=user.email,
+            # customer_first_name=user.first_name,
+            # customer_last_name=user.last_name,
+            # customer_phone=user.phone
+        )
+
+        subject = 'Welcome to Service Call System'
+        message = 'We are glad you are here!'
+
+        # send_mail(
+        #     subject,
+        #     message,
+        #     settings.EMAIL_HOST_USER,
+        #     [Customer.customer_email],
+        #     fail_silently=False,
+        # )
 
 post_save.connect(createCustomer, sender=User)
 post_save.connect(updateCustomer, sender=customer)

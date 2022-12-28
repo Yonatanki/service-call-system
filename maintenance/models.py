@@ -38,20 +38,27 @@ class employee(models.Model):
     __tablename__ = "Employee"
     employee_id = models.UUIDField(default=uuid.uuid4, unique=True,
                                    primary_key=True, editable=False)
-    employee_name = models.CharField(max_length=200, blank=True, null=True)
-    employee_username = models.CharField(max_length=200, unique=True, blank=True, null=True)
+
+    # employee_id = models.ForeignKey(customer, blank=True, null=True, on_delete=models.CASCADE)
+    employee_user_name = models.ForeignKey(customer, blank=True, null=True, on_delete=models.CASCADE)
+    # employee_name = models.CharField(max_length=200, blank=True, null=True)
+    # employee_name = models.ForeignKey(customer, blank=True, null=True, on_delete=models.CASCADE)
+    # employee_username = models.CharField(customer.customer_username, max_length=200, unique=True, blank=True, null=True)
+    # employee_username = models.ForeignKey(customer, blank=True, null=True, on_delete=models.CASCADE)
     employee_department_id = models.ForeignKey('department', blank=True, null=True, on_delete=models.CASCADE)
     employee_privileges = models.ManyToManyField('privileges', blank=True)
     # employee_privileges = models.ManyToOneRel('employee_privileges', 'privileges', 'employee_privileges')
     employee_created = models.DateTimeField(auto_now_add=True)
-    employee_email = models.EmailField(max_length=500, blank=True, null=True)
-    employee_phone = PhoneField(blank=True, null=True, help_text='Contact phone number')
+    # employee_email = models.EmailField(max_length=500, blank=True, null=True)
+    # employee_email = models.ForeignKey(customer, blank=True, null=True, on_delete=models.CASCADE)
+    # employee_phone = PhoneField(blank=True, null=True, help_text='Contact phone number')
+    # employee_phone = models.ForeignKey(customer, blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.employee_name}'
+        return f'{self.employee_user_name}'
 
     class Meta:
-        ordering = ['employee_name', '-employee_created']
+        ordering = ['employee_user_name', '-employee_created']
 
 
 class privileges(models.Model):
@@ -96,7 +103,7 @@ class sub_category(models.Model):
         ordering = ['sub_category_name']
 
 
-class request(models.Model):
+class call_request(models.Model):
     __tablename__ = "Request"
     request_id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     request_number = models.AutoField(primary_key=True)
@@ -110,11 +117,12 @@ class request(models.Model):
     request_video = models.FileField(upload_to='requests_videos', blank=True, null=True,
                                      validators=[FileExtensionValidator(
                                          allowed_extensions=['MOV', 'avi', 'mp4', 'webm', 'mkv'])])
-    request_message_id = models.ForeignKey('message', on_delete=models.CASCADE, blank=True, null=True)
+    # request_message = models.ForeignKey('message', on_delete=models.CASCADE, blank=True, null=True)
+    request_message = models.TextField(null=True, blank=True)
     request_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.request_number
+        return f'{str(self.request_number)} :     {self.request_category_id}:    {self.request_sub_category_id}'
 
     class Meta:
         ordering = ['request_number']
@@ -139,7 +147,7 @@ class status_request(models.Model):
     __tablename__ = "Status Request"
     status_request_id = models.UUIDField(default=uuid.uuid4, unique=True,
                                          primary_key=True, editable=False)
-    status_request_request_id = models.ForeignKey('request', blank=True, null=True, on_delete=models.CASCADE)
+    status_request_request_id = models.ForeignKey('call_request', blank=True, null=True, on_delete=models.CASCADE)
     status_request_status = models.ForeignKey('status', blank=True, null=True, on_delete=models.CASCADE)
     status_request_description = models.TextField(null=True, blank=True)
     status_request_employee_id = models.ForeignKey('employee', blank=True, null=True, on_delete=models.CASCADE)
