@@ -1,18 +1,10 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-<<<<<<< HEAD
 from django.contrib import admin
 from .forms import RequestForm
 from .models import employee
 from Users.models import customer
-=======
-
-from .forms import RequestForm
-from .models import employee
-
->>>>>>> bde0420 (initial commit)
-
 # Create your views here.
 
 def home(request):
@@ -73,8 +65,6 @@ def create_request(request):
 
 
     context = {'form': request_form, 'customer': customer_instance}
-
-  
     return render(request, "maintenance/request.html", context)
 
 
