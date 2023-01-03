@@ -1,0 +1,53 @@
+{% extends 'main.html' %}
+
+
+{% include 'navbar.html' %}
+
+{% block content %}
+
+<main class="settingsPage profile my-md">
+<div class="formPage my-xl">
+  <div style="padding: center" class="content-box">
+    <div class="formWrapper">
+      <div  class="container  form--inline container--header-form ">
+          <button class="backButton pointer" onclick="history.back()"><i class="im im-angle-left" style="color:navy">&lt;</i></button>
+      </div>
+        <div class="center">
+          <label class="form__field form__label--inline form__label strong font-xl">Request Details</label>
+        </div>
+
+    <table class=" table table-striped table-hover table-bordered table-condensed">
+          <tbody onload="">
+
+            <tr >
+              <td>Request NO.</td>
+              <td>{{details.request_number}}</td>
+            </tr>
+            <tr>
+              <td>Category</td>
+              <td>{{details.request_category_id}}</td>
+            </tr>
+            <tr>
+              <td>Sub Category</td>
+              <td>{{details.request_sub_category_id}}</td>
+            </tr>
+            <tr>
+              <td>Location</td>
+              <td>{{details.request_location_id}}</td>
+            </tr>
+            <tr>
+              <td>Status</td>
+              <td>{{details.request_status}}</td>
+            </tr>
+            <tr>
+              <td>Created</td>
+              <td>{{details.request_created}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  </div>
+  </div>
+</main>
+
+{% endblock content %}

@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from django.contrib.auth.models import User
 from .models import customer
 
-from maintenance.models import call_request
+from maintenance.models import call_request, status_request
 
 
 from django.core.mail import send_mail
@@ -14,6 +14,8 @@ from django.conf import settings
 # @receiver(post_save, sender=Profile)
 
 # @receiver(post_save, sender=customer)
+
+
 def updateCustomer(sender, instance, created, **kwargs):
     print('Customer Saved!')
     print('Instance: ', instance)
@@ -74,20 +76,21 @@ def deleteCustomer(sender, instance, **kwargs):
 
 
 
-def createRequest(sender, instance, **kwargs):
+def createStatusRequest(sender, instance, created, **kwargs):
     print('Customer signal triggered')
     print('INSTANCE: ', instance)
     print('CREATED: ', created)
     print('Sender: ', sender)
     if created:  # checks if instance (customer) created
-        user = instance
-        print('USER INSTANCE: ', user)
-        print('USER INSTANCE EMAIL: ', user.email)
-        print('USER INSTANCE USERNAME: ', user.username)
-        print('USER INSTANCE FIRST NAME: ', user.first_name)
+        req = instance
+        print('USER INSTANCE: ', req)
+        # print('USER INSTANCE EMAIL: ', user.email)
+        # print('USER INSTANCE USERNAME: ', user.username)
+        # print('USER INSTANCE FIRST NAME: ', user.first_name)
         # print('USER INSTANCE PHONE: ', user.phone)
-        req = call_request.objects.create(
-            request_employee_id= user
+        req = status_request.objects.create(
+
+            # request_employee_id= user
             # user=user,
             # customer_username=user.username,
             # customer_email=user.email,
@@ -107,6 +110,8 @@ def createRequest(sender, instance, **kwargs):
         #     fail_silently=False,
         # )
 
+
 post_save.connect(createCustomer, sender=User)
 post_save.connect(updateCustomer, sender=customer)
+# post_save.connect(createStatusRequest, sender=call_request)
 post_delete.connect(deleteCustomer, sender=customer)

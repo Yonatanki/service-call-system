@@ -1,12 +1,7 @@
 from django import forms
 from django.forms import ModelForm, DateField, widgets
-<<<<<<< HEAD
+
 from .models import call_request
-
-=======
-from .models import request
->>>>>>> bde0420 (initial commit)
-
 # from .utils import DatePickerInput
 
 
