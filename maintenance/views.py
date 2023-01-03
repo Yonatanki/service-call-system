@@ -3,8 +3,10 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import admin
 from .forms import RequestForm
-from .models import employee
+from .models import employee, call_request, status_request, status
 from Users.models import customer
+
+
 # Create your views here.
 
 def home(request):
@@ -28,7 +30,6 @@ def maintenance(request, pk):
 
 
 def create_request(request):
-
     print('REQUEST2:  ', request.user.customer.customer_id)
     request_form = RequestForm()
     # print(request_form)
@@ -44,6 +45,9 @@ def create_request(request):
             default_employee = customer.objects.get(customer_username='administrator')
             print('DEFAULT EMPLOYEE ', default_employee)
             service_request.request_customer_id = request.user.customer
+            status_open = status.objects.get(status_state='open')
+            service_request.request_status = status_open
+            print('STATUS:  @@@@@: ', status_open)
             request_form.save()
             print('#####: ', default_employee)
             choices = employee.objects.all()
@@ -55,17 +59,21 @@ def create_request(request):
                     service_request.request_employee_id.add(choice)
             service_request.save()
             messages.info(request, 'Alteon successfully added')
-            # print(service_request)
-
             return redirect('request')
 
         else:
             errors = request_form._errors
             messages.info(request, errors)
 
-
     context = {'form': request_form, 'customer': customer_instance}
     return render(request, "maintenance/request.html", context)
+
+
+def request_details(request, pk):
+    req_details = call_request.objects.get(request_id=pk)
+    # details = call_request(instance=req_details)
+    context = {'details': req_details}
+    return render(request, "maintenance/request_details.html", context)
 
 
 def helpDesk(request):

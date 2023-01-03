@@ -7,13 +7,14 @@ from django.contrib.auth.forms import UserCreationForm
 from .forms import CustomUserCreationForm, CustomerCreationForm
 from .models import customer
 
-from maintenance.models import call_request
+from maintenance.models import call_request, status_request, status
 
 
 # Create your views here.
 
-def home(request):
-    return render(request, 'users/account.html')
+# def home(request):
+#     return render(request, 'users/account.html')
+from maintenance.forms import RequestForm
 
 
 def customers(request):
@@ -130,7 +131,13 @@ def userAccount(request):
     # skills = profile.skill_set.all()
     print('call req: ', call_request.objects.all())
     # requests = call_request.objects.get(request_customer_id=customer.customer_id)
-    context = {'customer': customer}
+    req_list = call_request.objects.filter(request_customer_id=customer.customer_id)
+    status_open = status.objects.get(status_state='open')
+    # status_req = call_request.objects.get('request_status')
+
+    print('req_list: $$$: ', req_list)
+    # print('status_req: ****%%: ', status_req)
+    context = {'customer': customer, 'requests': req_list, 'status': status_open}
     # context = {'requests': requests}
     
     # context = {'profile': profile, 'skills': skills, 'projects': projects}

@@ -116,8 +116,54 @@
             <div> <a id="{{customer.customer_id}}" class="tag tag--pill tag--main settings__btn" href="{% url 'request' %}"><i class="im im-edit"></i>
               open request</a></div><div>{{customer.customer_id}}</div>
       </div>
+
+<!--            <div><a id="{{customer.customer_id}}" class="tag tag&#45;&#45;pill tag&#45;&#45;main settings__btn" href="{% url 'request' %}"><i class="im im-edit"></i>{{requests}} </a></div>-->
+
     </div>
   </div>
+
+    <table class="table table-striped table-hover table-bordered">
+        <table class="settings__table table-bordered table-striped table-condensed">
+          <thead class="thead-dark text-center strong">
+            <!--<td>Edit</td>-->
+            <!--<td>Details</td>-->
+            <tr>
+              <td>Request NO.</td>
+              <td>Category</td>
+              <td>Sub Category</td>
+              <td>Location</td>
+    <!--          <td>Owner</td>-->
+              <td>Status</td>
+              <td>Created</td>
+            </tr>
+          </thead>
+            {% for call_request in requests %}
+
+            <tr class="text-center" style='cursor: pointer; cursor: hand;'>
+                <td>{{call_request.request_number}}</td>
+                <td>{{call_request.request_category_id}}</td>
+                <td>{{call_request.request_sub_category_id}}</td>
+                <td>{{call_request.request_location_id}}</td>
+                <td>{{call_request.request_status}}</td>
+                <td>{{call_request.request_created}}</td>
+                <td><a href="{% url 'request_detailes' call_request.request_id %}">Details</a></td>
+           </tr>
+
+
+
+<!--            <div class="form__field">-->
+
+
+    {% comment %}
+                    {{call_request}}
+                        {{call_request.request_status}}
+
+        </div>
+        <br>
+    {% endcomment %}
+        {% endfor %}
+        </table>
+    </table>
 </main>
 
 {% endblock %}

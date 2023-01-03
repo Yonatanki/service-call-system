@@ -120,6 +120,7 @@ class call_request(models.Model):
                                      validators=[FileExtensionValidator(
                                          allowed_extensions=['MOV', 'avi', 'mp4', 'webm', 'mkv'])])
     # request_message = models.ForeignKey('message', on_delete=models.CASCADE, blank=True, null=True)
+    request_status = models.ForeignKey('status', blank=True, null=True, on_delete=models.CASCADE)
     request_message = models.TextField(null=True, blank=True)
     request_created = models.DateTimeField(auto_now_add=True)
 
@@ -139,7 +140,7 @@ class status(models.Model):
     status_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.status_state}, {self.status_date_changed_state}'
+        return f'{self.status_state}'
 
     class Meta:
         ordering = ['status_state']
@@ -149,8 +150,6 @@ class status_request(models.Model):
     __tablename__ = "Status Request"
     status_request_id = models.UUIDField(default=uuid.uuid4, unique=True,
                                          primary_key=True, editable=False)
-    status_request_request_id = models.ForeignKey('call_request', blank=True, null=True, on_delete=models.CASCADE)
-
     status_request_status = models.ForeignKey('status', blank=True, null=True, on_delete=models.CASCADE)
     status_request_description = models.TextField(null=True, blank=True)
     status_request_employee_id = models.ForeignKey('employee', blank=True, null=True, on_delete=models.CASCADE)
@@ -161,7 +160,7 @@ class status_request(models.Model):
     #     self.request_number = None
 
     def __str__(self):
-        return f'{self.status_request_request_id} {self.status_request_status}'
+        return f'{self.status_request_status}'
 
 
 class message(models.Model):
