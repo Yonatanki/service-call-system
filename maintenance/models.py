@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import FileExtensionValidator
 from phone_field import PhoneField
 from Users.models import customer
+# from Users.utils import *
 import uuid
 
 
@@ -38,28 +39,17 @@ class employee(models.Model):
     __tablename__ = "Employee"
     employee_id = models.UUIDField(default=uuid.uuid4, unique=True,
                                    primary_key=True, editable=False)
-    # employee_id = models.ForeignKey(customer, blank=True, null=True, on_delete=models.CASCADE)
     employee_user_name = models.ForeignKey(customer, blank=True, null=True, on_delete=models.CASCADE)
-    # employee_name = models.CharField(max_length=200, blank=True, null=True)
-    # employee_name = models.ForeignKey(customer, blank=True, null=True, on_delete=models.CASCADE)
-    # employee_username = models.CharField(customer.customer_username, max_length=200, unique=True, blank=True, null=True)
-    # employee_username = models.ForeignKey(customer, blank=True, null=True, on_delete=models.CASCADE)
-
     employee_department_id = models.ForeignKey('department', blank=True, null=True, on_delete=models.CASCADE)
     employee_privileges = models.ManyToManyField('privileges', blank=True)
     # employee_privileges = models.ManyToOneRel('employee_privileges', 'privileges', 'employee_privileges')
     employee_created = models.DateTimeField(auto_now_add=True)
 
-    # employee_email = models.EmailField(max_length=500, blank=True, null=True)
-    # employee_email = models.ForeignKey(customer, blank=True, null=True, on_delete=models.CASCADE)
-    # employee_phone = PhoneField(blank=True, null=True, help_text='Contact phone number')
-    # employee_phone = models.ForeignKey(customer, blank=True, null=True, on_delete=models.CASCADE)
-
     def __str__(self):
         return f'{self.employee_user_name}'
 
     class Meta:
-        ordering = ['employee_user_name', '-employee_created']
+        ordering = ['employee_id', '-employee_created']
 
 
 class privileges(models.Model):
@@ -104,7 +94,6 @@ class sub_category(models.Model):
         ordering = ['sub_category_name']
 
 
-
 class call_request(models.Model):
     __tablename__ = "Request"
     request_id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
@@ -115,13 +104,13 @@ class call_request(models.Model):
     request_location_id = models.ForeignKey('location', blank=True, null=True, on_delete=models.SET_NULL)
     request_employee_id = models.ManyToManyField('employee', blank=True, null=True)
     request_description = models.TextField(null=True, blank=True)
-    request_img = models.ImageField(upload_to='requests_images', blank=True, null=True)
+    request_img = models.ImageField(upload_to='requests_images', default="/user.png", blank=True, null=True)
     request_video = models.FileField(upload_to='requests_videos', blank=True, null=True,
                                      validators=[FileExtensionValidator(
                                          allowed_extensions=['MOV', 'avi', 'mp4', 'webm', 'mkv'])])
     # request_message = models.ForeignKey('message', on_delete=models.CASCADE, blank=True, null=True)
     request_status = models.ForeignKey('status', blank=True, null=True, on_delete=models.CASCADE)
-    request_message = models.TextField(null=True, blank=True)
+    # request_message = models.TextField(max_length=255, null=True, blank=True)
     request_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -167,19 +156,30 @@ class message(models.Model):
     __tablename__ = "Message"
     message_id = models.UUIDField(default=uuid.uuid4, unique=True,
                                   primary_key=True, editable=False)
+    # message_request_id = models.ForeignKey(call_request, on_delete=models.SET_NULL, null=True, blank=True)
+    message_request_id = models.ForeignKey(call_request, on_delete=models.SET_NULL, null=True, blank=True)
     sender = models.ForeignKey(
         customer, on_delete=models.SET_NULL, null=True, blank=True)
-    recipient = models.ForeignKey(
-        customer, on_delete=models.SET_NULL, null=True, blank=True, related_name="messages")
-    name = models.CharField(max_length=200, null=True, blank=True)
-    email = models.EmailField(max_length=200, null=True, blank=True)
-    subject = models.CharField(max_length=200, null=True, blank=True)
+    # recipient = models.ForeignKey(
+    #     customer, on_delete=models.SET_NULL, null=True, blank=True, related_name="messages")
     body = models.TextField()
     is_read = models.BooleanField(default=False, null=True)
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.subject
+        return f'{self.sender}'
 
     class Meta:
         ordering = ['is_read', '-created']
+
+# class image(models.Model):
+#     __tablename__ = "Images"
+#     image_id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
+#     image_service_request_number = models.ForeignKey(call_request, on_delete=models.SET_NULL, null=True, blank=True)
+#     request_img = models.ImageField(upload_to=wrapper, default="/user.png", blank=True, null=True)
+#
+#     def __str__(self):
+#         return self.image_service_request_number
+#
+#     class Meta:
+#         ordering = ['service_request_id']

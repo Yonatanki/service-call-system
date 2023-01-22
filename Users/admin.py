@@ -4,12 +4,12 @@ from django.contrib import admin
 # Register your models here.
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
-from .models import customer
+from .models import customer, email_message
 
 admin.site.register(customer)
 
 
-# admin.site.register(message)
+admin.site.register(email_message)
 # @admin.register(customer)
 
 # class ContactForm(forms.ModelForm):

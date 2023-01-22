@@ -21,7 +21,7 @@
                     <label for="formInput#text">{{field.label}} </label>
                     <strong><input class="input" type="text" value="{{customer.customer_username}}" readonly></strong>
                 </div>
-            {% else %}
+            {% elif field.label != 'Message' %}
 
                 <div class="form__field">
                         <label for="formInput#text">{{field.label}} </label>
