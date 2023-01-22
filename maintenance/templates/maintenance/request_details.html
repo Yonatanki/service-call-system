@@ -32,6 +32,16 @@
               <td>{{details.request_sub_category_id}}</td>
             </tr>
             <tr>
+              <td>Description</td>
+              <td>{{details.request_description}}</td>
+            </tr>
+            <tr>
+              <td>Owner</td>
+              {% for emp in details.request_employee_id.all %}
+              <td>{{emp}}</td>
+              {% endfor %}
+            </tr>
+            <tr>
               <td>Location</td>
               <td>{{details.request_location_id}}</td>
             </tr>
@@ -43,9 +53,33 @@
               <td>Created</td>
               <td>{{details.request_created}}</td>
             </tr>
+            <tr>
+              <td>Message</td>
+              <td>{{details.request_message}}</td>
+            </tr>
           </tbody>
         </table>
-      </div>
+      {% for emp in details.request_employee_id.all %}
+                    <span class="tag tag--pill tag--sub tag--lg">
+                        <small>{{emp}}</small>
+                    </span>
+                    {% endfor %}
+      {% if details.request_img %}
+<!--        <tr>-->
+<!--              <td>Image</td>-->
+              <img src="{{ details.request_img.url }}">
+<!--            </tr>-->
+      {% endif %}
+      <form class="form" method="POST" , enctype="multipart/form-data" xmlns="http://www.w3.org/1999/html">
+                    {% csrf_token %}
+      <div class="form__field">
+                    <label for="formInput#text">{{form.body.label}} </label>
+                    {{form.body}}
+
+                </div>
+      <input id="form--submit" class="btn btn--sub btn--lg  my-md" type="submit" value="Submit" />
+      </form>
+    </div>
   </div>
   </div>
 </main>

@@ -9,7 +9,6 @@ from .models import customer
 
 from maintenance.models import call_request, status_request, status
 
-
 # Create your views here.
 
 # def home(request):
@@ -80,7 +79,6 @@ def registerUser(request):
 
     context = {'page': page, 'form': form}  # , 'customer_form': customer_form}
 
-
     return render(request, 'users/login_register.html', context)
 
 
@@ -106,8 +104,10 @@ def loginUser(request):
         if user is not None:
             print('USER NOT NONE : ', user.id)
             login(request, user)  # create sessions for user in the database get the seesion and add to browser cookies
-
-       
+            # customer = request.user.customer
+            # if customer.customer_username == 'administrator':
+            #     page = 'administrator'
+            #     return redirect(request.GET['next'] if 'next' in request.GET else 'admin-page')
             return redirect(request.GET['next'] if 'next' in request.GET else 'account')
 
         else:
@@ -124,10 +124,14 @@ def logoutUser(request):
 
 @login_required(login_url='login')
 def userAccount(request):
-
+    page = 'customer'
     customer = request.user.customer
+    # x = customer.
+    # if customer.customer_username
     print('CUSTOMER: ', customer)
     print('CUSTOMER ID: ', customer.customer_id)
+    print('CUSTOMER USER NAME: ', customer.customer_username)
+    print('REQUEST: ', customer.customer_employee)
     # skills = profile.skill_set.all()
     print('call req: ', call_request.objects.all())
     # requests = call_request.objects.get(request_customer_id=customer.customer_id)
@@ -137,9 +141,15 @@ def userAccount(request):
 
     print('req_list: $$$: ', req_list)
     # print('status_req: ****%%: ', status_req)
-    context = {'customer': customer, 'requests': req_list, 'status': status_open}
+    if customer.customer_username == 'administrator':
+        page = 'administrator'
+        context = {'customer': customer.customer_username, 'requests': req_list, 'status': status_open, 'page': page}
+        return render(request, 'users/admin_home.html', context)
+    elif customer.customer_employee:
+        page = 'employee'
+    context = {'customer': customer.customer_username, 'requests': req_list, 'status': status_open, 'page': page}
     # context = {'requests': requests}
-    
+
     # context = {'profile': profile, 'skills': skills, 'projects': projects}
     return render(request, 'users/account.html', context)
 

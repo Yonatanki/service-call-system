@@ -22,7 +22,7 @@ class customer(models.Model):
     customer_email = models.EmailField(max_length=500, blank=True, null=False)
     customer_username = models.CharField(max_length=200, unique=True, blank=True, null=True)
     customer_phone = PhoneNumberField(blank=True, null=True)
-    # customer_location = models.CharField(max_length=200, blank=True, null=True)
+    customer_employee = models.BooleanField(default=False)
     customer_image = models.ImageField(null=True, blank=True, upload_to='static/images/customers',
                                        default='static/images/customers/user-default.png')
     customer_created = models.DateTimeField(auto_now_add=True)
@@ -34,22 +34,29 @@ class customer(models.Model):
     class Meta:
         ordering = ['customer_created']
 
-# class message(models.Model):
-#     message_id = models.UUIDField(default=uuid.uuid4, unique=True,
-#                                   primary_key=True, editable=False)
-#     sender = models.ForeignKey(
-#         customer, on_delete=models.SET_NULL, null=True, blank=True)
-#     recipient = models.ForeignKey(
-#         customer, on_delete=models.SET_NULL, null=True, blank=True, related_name="messages")
-#     name = models.CharField(max_length=200, null=True, blank=True)
-#     email = models.EmailField(max_length=200, null=True, blank=True)
-#     subject = models.CharField(max_length=200, null=True, blank=True)
-#     body = models.TextField()
-#     is_read = models.BooleanField(default=False, null=True)
-#     created = models.DateTimeField(auto_now_add=True)
 
-#     def __str__(self):
-#         return self.subject
+class email_message(models.Model):
+    __tablename__ = "Emails"
+    email_id = models.UUIDField(default=uuid.uuid4, unique=True,
+                                  primary_key=True, editable=False)
+    sender = models.ForeignKey(
+        customer, on_delete=models.SET_NULL, null=True, blank=True)
+    recipient = models.ForeignKey(
+        customer, on_delete=models.SET_NULL, null=True, blank=True, related_name="messages")
+    name = models.CharField(max_length=200, null=True, blank=True)
+    email = models.EmailField(max_length=200, null=True, blank=True)
+    subject = models.CharField(max_length=200, null=True, blank=True)
+    body = models.TextField()
+    is_read = models.BooleanField(default=False, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.subject
+
+
+
+
+
 
 #     class Meta:
 #         ordering = ['is_read', '-created']
