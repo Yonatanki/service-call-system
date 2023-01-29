@@ -32,6 +32,8 @@ def maintenance(request, pk):
 
 
 def create_request(request):
+    page = 'customer'
+    customer = request.user.customer
     print('REQUEST2:  ', request.user.customer.customer_id)
     request_form = RequestForm()
     # print(request_form)
@@ -71,14 +73,15 @@ def create_request(request):
                     service_request.request_employee_id.add(choice)
             service_request.save()
             messages.info(request, 'Alteon successfully added')
-            return redirect('request')
+            return redirect('create_request')
 
         else:
             errors = request_form._errors
             messages.info(request, errors)
 
+
     context = {'form': request_form, 'customer': customer_instance}
-    return render(request, "maintenance/request.html", context)
+    return render(request, "maintenance/create_request.html", context)
 
 
 def request_details(request, pk):
@@ -95,7 +98,7 @@ def request_details(request, pk):
 
             # f = f'{b}\n[{today}]:\n {request.POST["request_message"]}\n'
             # request_form.request_message = f
-            request_form.save()
+            # request_form.save()
             service_request = message_form.save(commit=False)
             # print('TODAYE MESSAGE: 2 ', service_request.request_message)
             service_request.message_request_id = req_details
@@ -111,6 +114,14 @@ def request_details(request, pk):
     print('req details: ', req_details.request_employee_id)
     context = {'details': req_details, 'form': message_form}
     return render(request, "maintenance/request_details.html", context)
+
+
+def requests(request):
+    # user = request.user.customer
+    requests_list = call_request.objects.all()
+    employees = employee.objects.all()
+    context = {'Requests': requests_list, 'employees': employees}
+    return render(request, 'maintenance/requests.html', context)
 
 
 def helpDesk(request):
