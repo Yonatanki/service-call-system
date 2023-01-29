@@ -1,0 +1,24 @@
+{% extends 'main.html' %}
+
+{% block content%}
+
+<h1>Requests page</h1>
+
+    <a class="tag tag--pill tag--main settings__btn" href="{% url 'create_request' %}">Create Request</a>
+
+<div>Requests</div>
+{% for Request in Requests %}
+    <div class="card__body dev">
+<!--        <img class="avatar avatar&#45;&#45;xl" src="{{ customer.customer_image.url }}" />-->
+        <a href="{% url 'request_details' Request.request_id %}">{{Request}}</a>
+
+        <p>Status: {{Request.request_status}}</p>
+        {% for employee in Request.request_employee_id.all %}
+
+        <p>Owner: {{employee}}</p>
+
+        {% endfor %}
+    </div>
+
+{% endfor %}
+{% endblock content %}

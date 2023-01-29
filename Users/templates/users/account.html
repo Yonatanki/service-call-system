@@ -11,12 +11,14 @@
        <div class="column column--1of3">
                 <h1>customer page</h1>
             </div>
-            <div> <a id="{{customer.customer_id}}" class="tag tag--pill tag--main settings__btn" href="{% url 'request' %}"><i class="im im-edit"></i>
-              open request</a></div><div>{{customer.customer_id}}</div>
+            <div> <a id="{{customer.customer_id}}" class="tag tag--pill tag--main settings__btn" href="{% url 'create_request' %}"><i class="im im-edit"></i>
+              open request</a></div>
+          <div>{{customer.customer_id}}</div>
       </div>
 
-<!--            <div><a id="{{customer.customer_id}}" class="tag tag&#45;&#45;pill tag&#45;&#45;main settings__btn" href="{% url 'request' %}"><i class="im im-edit"></i>{{requests}} </a></div>-->
-
+{% comment %}
+        <!--            <div><a id="{{customer.customer_id}}" class="tag tag&#45;&#45;pill tag&#45;&#45;main settings__btn" href="{% url 'create_request' %}"><i class="im im-edit"></i>{{requests}} </a></div>-->
+{% endcomment %}
     </div>
   </div>
 
